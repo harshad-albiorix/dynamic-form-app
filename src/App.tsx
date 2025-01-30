@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Routes } from "./Routes";
+import { Provider } from "react-redux";
+import store, { pstore } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { Header } from "./components";
+import { Box } from "@mui/material";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={pstore}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <BrowserRouter basename="/">
+            <Header />
+            <Box component="main" sx={{ paddingTop: 8 }}>
+              <Routes />
+            </Box>
+          </BrowserRouter>
+        </LocalizationProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
