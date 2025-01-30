@@ -5,7 +5,6 @@ import {
   FormGroup,
   FormHelperText,
   FormControl,
-  FormLabel,
 } from "@mui/material";
 
 interface CheckboxGroupProps {

@@ -12,16 +12,15 @@ export const EditFormControl = () => {
   const dispatch = useDispatch();
 
   const cFormData = forms?.find((x) => {
-    if (id) {
-      return x.id === +id;
-    }
+    if (!id) return false;
+    return x.id === +id;
   });
 
   useEffect(() => {
     if (cFormData) {
       dispatch(setFormData(cFormData));
     }
-  }, [cFormData]);
+  }, [cFormData, dispatch]);
 
   return <CreateFormContainer />;
 };

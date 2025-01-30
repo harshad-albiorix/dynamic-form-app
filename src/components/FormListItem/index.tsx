@@ -7,9 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 interface IFormListItemProps {
   data: Partial<ICreateFormType>;
-  setSelectedForm: React.Dispatch<
-    React.SetStateAction<number | null | undefined>
-  >;
 }
 
 export const FormListItem: FC<IFormListItemProps> = ({ data }) => {
