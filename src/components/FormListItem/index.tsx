@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 interface IFormListItemProps {
   data: Partial<ICreateFormType>;
+  setSelectedForm: React.Dispatch<
+    React.SetStateAction<number | null | undefined>
+  >;
 }
 
 export const FormListItem: FC<IFormListItemProps> = ({ data }) => {
@@ -42,7 +45,11 @@ export const FormListItem: FC<IFormListItemProps> = ({ data }) => {
           >
             Delete
           </Button>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => navigate(`/preview/${data?.id}`)}
+          >
             Preview
           </Button>
         </Box>

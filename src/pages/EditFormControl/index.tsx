@@ -17,8 +17,6 @@ export const EditFormControl = () => {
     }
   });
 
-  //   console.log("test", cFormData, forms, id);
-
   useEffect(() => {
     if (cFormData) {
       dispatch(setFormData(cFormData));

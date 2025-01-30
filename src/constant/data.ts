@@ -1,5 +1,6 @@
 export const questionType = [
   "text",
+  "email",
   "number",
   "textarea",
   "date",

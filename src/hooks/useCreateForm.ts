@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useRef, useState } from "react";
-import { IFormQuestions } from "../types/createFormType";
+import { IFormQuestions, IOption } from "../types/createFormType";
 import { useFormik } from "formik";
 import { generateUniqueRandomNumber } from "../utils/func";
 import { resetFormData, setFormData, updateFormData } from "../redux/FormSlice";
@@ -14,7 +14,9 @@ export const useCreateForm = () => {
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form.formData);
   const dispatch = useDispatch();
-  const [edit, setEdit] = useState<IFormQuestions>();
+  const [edit, setEdit] = useState<IFormQuestions & Partial<{ options: any[] }>>();
+  const [options, setOptions] = useState<IOption[]>([]);
+
 
   const formik = useFormik<IFormQuestions>({
     initialValues: {
@@ -27,7 +29,10 @@ export const useCreateForm = () => {
 
   const formikRef = useRef(formik);
 
-  const handleCreateQuestion = (value: IFormQuestions) => {
+  const handleCreateQuestion = (
+    value: IFormQuestions & Partial<{ options: any[] }>
+  ) => {
+
     const id = generateUniqueRandomNumber();
     dispatch(
       setFormData({
@@ -38,22 +43,32 @@ export const useCreateForm = () => {
     );
   };
 
-  const handleEditQuestion = (value: IFormQuestions) => {
+  const handleEditQuestion = (value: IFormQuestions & Partial<{ options: any[] }>) => {
     const newF = formData?.formQuestions?.map((x) =>
       x.id === edit?.id ? { ...value, id: edit?.id } : x
     );
     dispatch(updateFormData({ ...formData, formQuestions: newF }));
     setEdit(undefined);
+    setOptions([]);
   };
 
   const handleSubmit = (value: IFormQuestions) => {
     if (value) {
       if (edit) {
-        handleEditQuestion(value);
+        if (["dropdown", "multi-select", "radio"].includes(value.type)) {
+          handleEditQuestion({ ...value, options });
+        } else {
+          handleEditQuestion(value);
+        }
       } else {
-        handleCreateQuestion(value);
+        if (["dropdown", "multi-select", "radio"].includes(value.type)) {
+          handleCreateQuestion({ ...value, options });
+        } else {
+          handleCreateQuestion(value);
+        }
       }
       formik.resetForm();
+      setOptions([]);
     }
   };
 
@@ -76,5 +91,14 @@ export const useCreateForm = () => {
     }
   };
 
-  return { edit, formik, formikRef, setEdit, handleSaveForm, handleBackToList };
+  return {
+    edit,
+    formik,
+    formikRef,
+    setEdit,
+    setOptions,
+    options,
+    handleSaveForm,
+    handleBackToList,
+  };
 };

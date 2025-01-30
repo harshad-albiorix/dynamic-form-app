@@ -1,11 +1,14 @@
 export type QuestionType =
   | ""
   | "text"
+  | "email"
   | "number"
   | "textarea"
   | "date"
   | "dropdown"
-  | "radio";
+  | "radio"
+  | "multi-select"
+  | "checkbox";
 
 export type ValidationType = "required" | "minLength" | "maxLength";
 
@@ -14,9 +17,10 @@ interface ILength {
   max: number;
 }
 
-interface IOption {
+export interface IOption {
   label: string;
   value: string;
+  field: string;
 }
 
 interface IBaseFormQuestion {
@@ -24,6 +28,26 @@ interface IBaseFormQuestion {
   question: string;
   type: QuestionType;
   validation: string[];
+}
+
+interface IOtherFormQuestion extends IBaseFormQuestion {
+  type: "";
+}
+
+interface ITextFormQuestion extends IBaseFormQuestion {
+  type: "text";
+}
+
+interface IEmailFormQuestion extends IBaseFormQuestion {
+  type: "email";
+}
+
+interface IDateFormQuestion extends IBaseFormQuestion {
+  type: "date";
+}
+
+interface ITextareaFormQuestion extends IBaseFormQuestion {
+  type: "textarea";
 }
 
 interface INumberFormQuestion extends IBaseFormQuestion {
@@ -41,11 +65,28 @@ interface IRadioFormQuestion extends IBaseFormQuestion {
   options: IOption[];
 }
 
+interface IDropdownWithMultiSelectFormQuestion extends IBaseFormQuestion {
+  type: "multi-select";
+  options: IOption[];
+}
+
+//checkbox
+interface ICheckboxFormQuestion extends IBaseFormQuestion {
+  type: "checkbox";
+  options: IOption[];
+}
+
 export type IFormQuestions =
-  | IBaseFormQuestion
+  | ITextFormQuestion
+  | IEmailFormQuestion
+  | IDateFormQuestion
+  | ITextareaFormQuestion
   | INumberFormQuestion
   | IDropdownFormQuestion
-  | IRadioFormQuestion;
+  | IRadioFormQuestion
+  | IDropdownWithMultiSelectFormQuestion
+  | ICheckboxFormQuestion
+  | IOtherFormQuestion;
 
 export interface ICreateFormType {
   id: number;

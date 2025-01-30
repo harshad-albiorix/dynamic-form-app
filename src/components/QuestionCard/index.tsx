@@ -17,7 +17,6 @@ export const QuestionCard: FC<IQuestionsCardProps> = ({
   const dispatch = useDispatch();
 
   const handleDelete = (id: number) => {
-    console.log(id);
     if (id) {
       dispatch(deleteQuestion(id));
     }

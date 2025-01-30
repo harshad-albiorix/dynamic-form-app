@@ -2,22 +2,29 @@ import { BaseTextFieldProps, TextField } from "@mui/material";
 import { FC } from "react";
 
 interface InputProps extends BaseTextFieldProps {
-  formik: any;
+  formik?: any;
+  onChange?: (e: any) => void;
 }
 
 export const Input: FC<InputProps> = (props) => {
-  const { formik, name, ...rest } = props;
+  const { formik, name, value, onChange, error, helperText, ...rest } = props;
 
-  const { handleChange, errors, touched, values } = formik;
+  const isFormik = formik && name;
+
+  const fieldValue = isFormik ? formik.values[name!] : value ?? "";
+  const fieldError = isFormik ? formik.errors[name!] : error;
+  const fieldTouched = isFormik ? formik.touched[name!] : false;
+  const fieldHelperText =
+    isFormik && fieldError && fieldTouched ? fieldError : helperText;
 
   return (
     <TextField
       sx={{ width: "100%" }}
-      name={name ? name : ""}
-      value={name ? values[name] : ""}
-      onChange={handleChange}
-      error={errors[name!] && touched[name!] ? errors[name!] : ""}
-      helperText={errors[name!] && touched[name!] ? errors[name!] : ""}
+      name={name}
+      value={fieldValue}
+      onChange={isFormik ? formik.handleChange : onChange}
+      error={Boolean(fieldError && fieldTouched)}
+      helperText={fieldHelperText}
       {...rest}
     />
   );

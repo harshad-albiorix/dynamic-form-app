@@ -5,6 +5,7 @@ import { FC } from "react";
 interface DateInputFieldProps extends DateFieldProps<any, any> {
   formik: any;
   name: string;
+  sx?: any;
 }
 
 export const DateInputField: FC<DateInputFieldProps> = (props) => {
